@@ -1,0 +1,54 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+// ya code mde aplyala output deych ki kiti swapping mde he sort hoil 
+// return kryche swapping count 
+ long merge(vector<int>&arr, vector<int>&temp, int start, int mid,int end){
+     int i =start , j= mid+1, k= start;
+     long c =0;
+     while(i<=mid && j<=end){
+         if(arr[i] <= arr[j])
+         temp[k++] = arr[i++];
+         else{ // arr[i] > arr[j] // inversion count case;
+         temp[k++] = arr[j++];
+         c+= mid -i +1;
+         }
+     }
+     while(i <= mid)
+     temp[k++] = arr[i++];
+    while(j<=end)
+     temp[k++] = arr[j++];
+     
+    while(start<= end){
+         arr[start] = temp[start];
+         ++start;
+     }
+     return c;
+ }
+ long mergeSort(vector<int>&arr, vector<int>&temp, int start, int end){
+     if(start >= end) return 0;
+     int mid = start+(end-start) /2;
+     cout<<"mid is"<<mid<<endl;
+     long c =0;
+     c+= mergeSort(arr, temp, start, mid);
+     c+= mergeSort(arr, temp, mid+1, end);
+     c+= merge(arr, temp, start, mid, end);
+     return c;
+     
+ }
+
+long countInversions(vector<int> arr) {
+  long c=0; //inversion counts
+  vector<int>temp(arr.size(),0);
+  c=mergeSort(arr, temp, 0, arr.size()-1);
+  return c;
+}
+int main(){
+    vector<int> arr{2,1,3,1,2};
+    long ans = countInversions(arr);
+    cout<<"Number of Inversion: "<<ans<<endl;
+    for(int i=0; i<arr.size(); i++){
+        cout<<arr[i]<<" ";
+    }
+    return 0;
+}
